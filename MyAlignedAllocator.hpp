@@ -21,6 +21,16 @@ struct MyAlignedAllocator {
     // Required typedefs for STL allocator compatibility, see README for details
     using value_type = T;
 
+    //Optional: Not mandatory technically but nice to have: 
+    //All instances of this allocator are considered equal — so memory can be shared between them safely
+    //Always equal because allocator is stateless
+    //This helps containers optimize away allocator comparisons and simplifies move operations.
+    using is_always_equal = std::true_type;  //Optional
+
+    //Following are not required as allocator_traits<MyAllocator<T>> will generate if missing
+    //using pointer = T*;                // Pointer to allocated memory
+    //using size_type = std::size_t;     // Type for size parameters
+
     // Default constructor — allocator is stateless
     MyAlignedAllocator() noexcept = default;
 
