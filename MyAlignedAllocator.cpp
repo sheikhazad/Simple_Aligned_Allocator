@@ -22,7 +22,7 @@ int main() {
     std::vector<TradeData, MyAlignedAllocator<TradeData>> trades;
 
     trades.reserve(1024);
-    trades.push_back({100, 150.25});
+    trades.emplace_back({100, 150.25});
 
     for(const auto& trade : trades) {
         std::cout<<"Volume: "<<trade.volume<<", Price: "<<trade.price<<'\n';
