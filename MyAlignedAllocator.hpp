@@ -76,7 +76,12 @@ struct MyAlignedAllocator {
     };
 };
 
-// Allocators compare equal if they have the same alignment
+/*STL needs these operators:
+    All instances of this allocator are interchangeable and always equal.
+    This is correct because the allocator is stateless.
+    There is no internal memory pool, no pointer, no counter, no ownership.
+    Two allocators with the same template parameters behave identically.
+    Allocators compare equal if they have the same alignment*/
 template<typename T, std::size_t A>
 bool operator==(const MyAlignedAllocator<T, A>&,
                 const MyAlignedAllocator<T, A>&) noexcept { return true; }
