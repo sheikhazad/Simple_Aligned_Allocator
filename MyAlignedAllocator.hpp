@@ -59,8 +59,10 @@ struct MyAlignedAllocator {
     /**
      * Deallocate memory previously allocated with allocate().
      * Must use the matching aligned delete.
+     *Even if the allocator does not need size, the parameter must be present so that the allocator matches what STL containers expect.
      */
     void deallocate(T* p, std::size_t) noexcept {
+        //operator delete with alignment does not require the size. It only needs the pointer and the alignment.
         ::operator delete(p, std::align_val_t(Alignment));
     }
 
