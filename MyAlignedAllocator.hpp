@@ -53,6 +53,7 @@ struct MyAlignedAllocator {
             throw std::bad_alloc{};
 
         // Allocate using C++17 aligned operator new
+        // std::align_val_t : A tag type(not function) used to tell operator new what alignment to use
         void* p = ::operator new(n * sizeof(T), std::align_val_t(Alignment));
         return static_cast<T*>(p);
     }
