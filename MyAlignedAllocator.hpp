@@ -32,6 +32,7 @@ struct MyAlignedAllocator {
     //using size_type = std::size_t;     // Type for size parameters
 
     // Default constructor — allocator is stateless
+    //Can not be made explicit as STL containers need to implicitly construct allocators when copy/move container, rebind
     MyAlignedAllocator() noexcept = default;
 
     //1. Rebind Constructor: STL rebind constructor — allows constructing MyAlignedAllocator<U> from MyAlignedAllocator<T>
