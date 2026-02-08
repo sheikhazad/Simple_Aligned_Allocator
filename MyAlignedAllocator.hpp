@@ -1,3 +1,4 @@
+//AlignedAllocator - Simpler version
 //MyAlignedAllocator.hpp
 #pragma once
 
