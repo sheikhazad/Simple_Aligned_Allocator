@@ -1,5 +1,5 @@
 ================================================================================
-README — MyAlignedAllocator
+README — MyAlignedAllocator - Simpler version
 ================================================================================
 
 MyAlignedAllocator is an STL‑compatible allocator that uses C++17’s aligned
