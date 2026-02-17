@@ -44,6 +44,18 @@ struct MyAlignedAllocator {
     template<typename U>
     MyAlignedAllocator(const MyAlignedAllocator<U, Alignment>& ) noexcept {}
 
+    //2. Rebind Allocator: Rebind allocator to another type U (required by STL containers)
+    //For e.g. If we already have: 
+    // MyAlignedAllocator<int, 64> myAllocator;
+    //Then myAllocator::rebind<double>::other is:
+    //MyAlignedAllocator<double, 64>
+    //Same alignment, but now allocates for double instead of int.
+    template<typename U>
+    struct rebind
+    {
+        using other = MyAlignedAllocator<U, Alignment>;
+    };
+
     /**
      * Allocate memory for n objects of type T, aligned to Alignment bytes.
      */
@@ -68,16 +80,6 @@ struct MyAlignedAllocator {
         ::operator delete(p, std::align_val_t(Alignment));
     }
 
-    //2. Rebind Allocator: Rebind allocator to another type U (required by STL containers)
-    //For e.g. If we already have: 
-    // MyAlignedAllocator<int, 64> myAllocator;
-    //Then myAllocator::rebind<double>::other is:
-    //MyAlignedAllocator<double, 64>
-    //Same alignment, but now allocates for double instead of int.
-    template<typename U>
-    struct rebind {
-        using other = MyAlignedAllocator<U, Alignment>;
-    };
 };
 
 /*STL needs these operators:
