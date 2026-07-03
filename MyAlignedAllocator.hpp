@@ -16,6 +16,7 @@ constexpr std::size_t CACHE_LINE_SIZE = 64;
  * starts at a cache‑line boundary. This helps avoid false sharing and
  * improves cache locality in multi‑threaded systems.
  */
+//NOTE: All methods are noexcept except allocate()
 template<typename T, std::size_t Alignment = CACHE_LINE_SIZE>
 struct MyAlignedAllocator {
 
