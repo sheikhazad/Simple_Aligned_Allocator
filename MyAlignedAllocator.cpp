@@ -2,6 +2,9 @@
 #include "MyAlignedAllocator.hpp"
 #include <iostream>
 #include <vector>
+#include <memory>//std::construct_at, std::destroy_at
+
+    
 
 //struct alignas(CACHE_LINE_SIZE) TradeData ==> Same as align first member of struct.
 struct TradeData {
@@ -18,6 +21,8 @@ struct TradeData {
 };
                 
 int main() {
+
+    //Usage: 1
     // Vector whose internal storage is cache‑line aligned
     std::vector<TradeData, MyAlignedAllocator<TradeData>> trades;
 
@@ -28,6 +33,56 @@ int main() {
         std::cout<<"Volume: "<<trade.volume<<", Price: "<<trade.price<<'\n';
     }
 
+    //Usage: 2
+    MyAlignedAllocator<Order> alloc;
+    // 1. Allocate raw memory
+    Order* p = alloc.allocate(1);
+    // 2. Construct Order in that raw memory
+    std::construct_at(p, 100, 50);
+
+    // Use the object
+    // p->...
+
+    // 3. Destroy the Order object
+    std::destroy_at(p);
+    // 4. Release the raw memory
+    alloc.deallocate(p, 1);
+
+    /*
+                     MyAlignedAllocator<Order>
+                          │
+                          ▼
+                 allocate(1)
+                          │
+                          ▼
+             ┌──────────────────────┐
+             │ 64-byte aligned      │
+             │ RAW MEMORY           │
+             │ Order doesn't exist  │
+             └──────────────────────┘
+                          │
+                          │ construct_at()
+                          ▼
+             ┌──────────────────────┐
+             │ Order object         │
+             │ price = 100          │
+             │ quantity = 50        │
+             └──────────────────────┘
+                          │
+                          │ destroy_at()
+                          ▼
+             ┌──────────────────────┐
+             │ RAW MEMORY           │
+             │ Order doesn't exist  │
+             └──────────────────────┘
+                          │
+                          │ deallocate()
+                          ▼
+                       memory
+                       returned
+    */
+
     return 0;
 }
-                             
+
+                      
